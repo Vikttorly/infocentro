@@ -1,0 +1,109 @@
+header{
+	background: #2c3e50;
+	color: #fff;
+}
+
+
+.main{
+	background: #f2f2f2;
+}
+
+.color1{
+	background: #34495e;
+	color: #fff;
+}
+
+aside{
+	background: #c0392b;
+	color: #fff;
+}
+
+footer{
+	background: #2c3e50;
+	color: #fff;
+	width: 100%;
+	position: fixed;
+	bottom: 0px;
+}
+
+.principal{
+	margin-top: 5%;
+}
+
+.contenedor{
+	background: #f2f2f2;
+	float-left;
+	position: relative;
+	margin-top: 4%;
+	width: 55%;
+	height: 25em;
+}
+
+.registro{
+	padding-top: 5%;
+}
+
+.ingreso{
+	padding-top: 12%;
+}
+
+.boton-estandar{
+	text-decoration: none;
+	width: 20%;
+	padding: 1%;
+	background-color: #c0392b;
+	text-align: center;
+	color: #fff;
+}
+
+.boton-estandar:hover{
+	text-decoration: none;
+	width: 20%;
+	padding: 1%;
+	background: #ad3528;
+	text-align: center;
+	color: #fff;
+}
+
+.caja-boton-registro{
+	float: left;
+	width: 20%;
+	padding: 1%;
+	background-color: #c0392b;
+	text-align: center;
+	color: #fff;
+	margin-left: 22.5%;
+}
+
+.caja-boton-ingreso{
+	float: left;
+	width: 20%;
+	padding: 1%;
+	background-color: #c0392b;
+	text-align: center;
+	color: #fff;
+	margin-left: .3%;
+}
+
+.caja-boton-registro:hover{
+	float: left;
+	width: 20%;
+	padding: 1%;
+	background: #ad3528;
+	text-align: center;
+	color: #fff;
+}
+
+.caja-boton-ingreso:hover{
+	float: left;
+	width: 20%;
+	padding: 1%;
+	background: #ad3528;
+	text-align: center;
+	color: #fff;
+
+}
+
+.seccion-botones-registrado{
+
+}
