@@ -102,31 +102,42 @@ if ($_SESSION['usuario']) {
 
                         <!--Seccion para el registro (formulario de registro)-->
                
-                            <div class="MostrarRegistro">
+                        <div class="MostrarRegistro">
 
-<a href="#"><div class="caja-boton-registro">INGRESO</div></a>
-
-<div class="container contenedor">
-    <div class="ingreso">
-        <div class="col-md-8 col-md-offset-2">
-            <form method="post" action="ingreso.php" autocomplete="off">
-                <div class="form-group">
-                    <label for="usuario">Correo Electrónico: </label>
-                    <input type="usuario" class="form-control" id="usuario_ingreso" placeholder="Correo Electrónico" name="usuario_ingreso" required>
+        <div class="container contenedor2">
+            <center><h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Registro de usuario</h1><br></center>
+            <form action="registroindividual.php" method="post" class="form" role="form">
+            <div class="row">
+            <legend><h4> Información de identificación</h4></legend>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" placeholder="Cédula" required>
                 </div>
-                <div class="form-group">
-                    <label for="contraseña">Contraseña: </label>
-                    <input type="password" class="form-control" id="contraseña" placeholder="Contraseña" name="contraseña_ingreso" required>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" placeholder="Nombres" required>
                 </div>
-                <button type="submit" class="btn btn-default" id="Enviar" name="enviar_ingreso">Enviar </button>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" placeholder="Apellidos" required>
+                </div>
+            </div>
+           <br>
+            <div class="row">
+                <h4> Información personal</h4>
+               <div class="col-xs-4">
+                    <input type="text" class="form-control" placeholder=".col-xs-3">
+                </div>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" placeholder=".col-xs-4">
+                </div>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" placeholder=".col-xs-5">
+                </div>
+             </div>
+             <br>
+            <button class="btn btn-lg btn-danger btn-block" type="submit">
+                <i class="fa fa-plus-square" aria-hidden="true"></i> Registrar Tarjeta</button>
             </form>
-        </div>
-    </div>
-</div>
-</div>
-                                
-                            </div>
-
+        </div>                                    
+                        </div>
                         <!--Seccion para el historial (formulario de historial)-->
                
                             <div class="MostrarHistorial">

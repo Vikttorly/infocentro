@@ -39,6 +39,15 @@ footer{
 	height: 25em;
 }
 
+.contenedor2{
+	background: #f2f2f2;
+	float-left;
+	position: relative;
+	margin-top: 4%;
+	width: 80%;
+	height: 26.50em;
+}
+
 .registro{
 	padding-top: 5%;
 }
