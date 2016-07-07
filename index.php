@@ -14,7 +14,7 @@
 <body>
 	<header>
 		<div class="container">
-			<a href="/infocentro" style="text-decoration: none; color: #fff;"><h1><i class="fa fa-cube" aria-hidden="true"></i> Inicio</a></h1>
+			<a href="/infocentro" style="text-decoration: none; color: #fff;"><h1><img src="img/logo1.png" width="70"> Inicio</a></h1>
 		</div>
 	</header>
 <?php
@@ -44,7 +44,7 @@
 					<label for="contraseña">Contraseña: </label>
 					<input type="password" class="form-control" id="contraseña" placeholder="Contraseña" name="contraseña_ingreso" required>
 				</div>
-				<button type="submit" class="btn btn-default" id="Enviar" name="enviar_ingreso">Enviar </button>
+				<button type="submit" class="btn btn-default" id="Enviar" name="enviar_ingreso">Ingresar </button>
 			</form>
 		</div>
 	</div>
@@ -53,7 +53,7 @@
 
 <footer>
 	<div class="container-fluid">
-		<h3>Infocentro Miguel Coromoto Orta</h3>
+		<img src="img/logo2.png" width="250" style="margin-left:5%;">
 	</div>
 </footer>
 

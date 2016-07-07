@@ -27,7 +27,7 @@ footer{
 }
 
 .principal{
-	margin-top: 5%;
+	margin-top: 4%;
 }
 
 .contenedor{
@@ -113,6 +113,10 @@ footer{
 
 }
 
-.seccion-botones-registrado{
-
+.centrarTexto {
+  text-align: center
 }
+
+select { text-indent: 27%; }
+
+option { text-indent: 27%; }

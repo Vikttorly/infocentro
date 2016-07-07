@@ -3,6 +3,7 @@
 <body>
 
 <?php
+	date_default_timezone_set('America/Asuncion');
 
 	$bd = "infocentro";
 	$server = "localhost";

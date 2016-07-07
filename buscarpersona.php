@@ -1,6 +1,13 @@
 <?php
 
+session_start();
 require('conexion.php');
+
+?>
+
+<input type="hidden" id="funcionario" value="<?php echo $_SESSION['usuario']?>">
+
+<?php
 
 //Variable de búsqueda
 $consultaBusqueda = $_POST['valorBusqueda'];
@@ -13,6 +20,11 @@ $consultaBusqueda = str_replace($caracteres_malos, $caracteres_buenos, $consulta
 //Variable vacía (para evitar los E_NOTICE)
 $mensaje = "";
 
+$dia = date("d");
+$mes = date("m");
+$año = date("Y");
+$hoy = $dia.'/'.$mes.'/'.$año;
+
 
 //Comprueba si $consultaBusqueda está seteado
 if (isset($consultaBusqueda)) {
@@ -21,11 +33,12 @@ if (isset($consultaBusqueda)) {
 	//donde el nombre sea igual a $consultaBusqueda, 
 	//o el apellido sea igual a $consultaBusqueda, 
 	//o $consultaBusqueda sea igual a nombre + (espacio) + apellido
-	$consulta = mysqli_query($conexion, "SELECT * FROM personas
+	$consulta = mysqli_query($conexion, "SELECT *, YEAR(CURDATE())-YEAR(fNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(fNacimiento,'%m-%d'), 0, -1) AS edadActual FROM usuarios 
 	WHERE ci LIKE '%$consultaBusqueda%' 
-	OR nombres LIKE '%$consultaBusqueda%'
-	OR apellidos LIKE '%$consultaBusqueda%'
+	OR nombre LIKE '%$consultaBusqueda%'
 	");
+
+
 
 	//Obtiene la cantidad de filas que hay en la consulta
 	$filas = mysqli_num_rows($consulta);
@@ -45,40 +58,37 @@ if (isset($consultaBusqueda)) {
 		echo 'Resultados para <strong>'.$consultaBusqueda.'</strong>';
 
 		//La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
-		while($resultados = mysqli_fetch_array($consulta)) {
+		while($resultados = mysqli_fetch_assoc($consulta)) {
+			$id = $resultados['id'];
 			$ci = $resultados['ci'];
-			$nombres = $resultados['nombres'];
-			$apellidos = $resultados['apellidos'];
+			$nombre = $resultados['nombre'];
 			$fNacimiento = $resultados['fNacimiento'];
+			$edad = $resultados['edadActual'];
 
-			function calculaEdad($fNacimiento){
-				list($ano,$mes,$dia) = explode("-",$fNacimiento);
-				$ano_diferencia  = date("Y") - $ano;
-				$mes_diferencia = date("m") - $mes;
-				$dia_diferencia   = date("d") - $dia;
-				if ($dia_diferencia < 0 || $mes_diferencia < 0)
-					$ano_diferencia--;
-				return $ano_diferencia;
+			$consultaFecha = mysqli_fetch_assoc(mysqli_query($conexion,"SELECT DATE_FORMAT(fEntrada,'%d/%m/%Y') AS fecha_sola FROM visitas WHERE usuario=$id ORDER BY fEntrada ASC"));
+			$ultimaVisita = $consultaFecha['fecha_sola'];
+			$nVisitas = mysqli_fetch_assoc(mysqli_query($conexion,"SELECT count(*) AS nVisitas FROM visitas WHERE usuario=$id"));
+			
+			if ($hoy == $ultimaVisita) {
+				$ultimaVisita = 'Hoy';
 			}
-
-			$edad = calculaEdad($fNacimiento);
 
 			//Output
 			$mensaje .= '  
-			<tr><td>'.$ci.'</td><td>'.$nombres.'</td><td>'.$apellidos.'</td><td>'.$edad.'</td><td><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></td><td><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></td>
+			<tr><td><div><input type="hidden" id="idUsuario" value="'.$id.'">'.$ci.'</div></td><td>'.$nombre.'</td><td>'.$edad.'</td><td>'.$nVisitas['nVisitas'].'</td><td>'.$ultimaVisita.'</td><td><i class="fa fa-plus-square" aria-hidden="true" id="visitado"></i></td>
 			</tr>
 			';
-
+}
 			?>
 
 			<table class="table table-condensed">
-				<tr class="info">
+				<tr bgcolor= "#8299af" style="color:white;">
 					<td><strong>Cédula</strong></td>
-					<td><strong>Nombres</strong></td>
-					<td><strong>Apellidos</strong></td>
+					<td><strong>Nombres y Apellidos</strong></td>
 					<td><strong>Edad</strong></td>
-					<td><strong>Entrada</strong></td>
-					<td><strong>Salida</strong></td>
+					<td><strong>Nº Visitas</strong></td>
+					<td><strong>Última Visita</strong></td>
+					<td><strong>Visitó</strong></td>
 				</tr>
 					<?php
 						echo $mensaje;
@@ -91,9 +101,26 @@ if (isset($consultaBusqueda)) {
 
 	}; 
 
-};
-
 ?>
+
+<script type="text/javascript">
+			$('document').ready(function(){
+				$('#visitado').click(function(){
+				var visita = 1;
+				var idUsuario = $('#idUsuario').val();
+				var funcionario = $('#funcionario').val();
+
+					jQuery.post("nuevavisita.php", {
+					visita:visita,
+					idUsuario:idUsuario,
+					funcionario: funcionario
+
+				}, function(data, textStatus){
+						buscar();
+					});
+				});
+			});
+</script>
 
 <script>
 	$("#ClickMostrarRegistro2").click(function(){

@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,18 +13,21 @@
 	<script src="js/jquery-1.12.0.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/validacion.js"></script>
+    <script language="JavaScript" src="calendario/javascripts.js"></script>
+
 	<title>Tablero - Control de visitas</title>
 </head>
 <body>
 
 	<header>
 		<div class="container">
-			<a href="/infocentro" style="text-decoration: none; color: #fff;"><h1><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Tablero</a></h1>
+			<a href="/infocentro" style="text-decoration: none; color: #fff;"><h1><img src="img/logo1.png" width="70"> Tablero</a></h1>
 		</div>
 	</header>
 
 <?php
 
+include ("calendario/calendario.php");
 session_start();
 
 if ($_SESSION['usuario']) {
@@ -33,7 +39,7 @@ if ($_SESSION['usuario']) {
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                       <h4>Menú</h4>
+                       <h4 style="color:white;">Menú</h4>
                 </li>
 
                 <li>
@@ -63,7 +69,6 @@ if ($_SESSION['usuario']) {
             </ul>
         </div>
 
-        <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -74,7 +79,7 @@ if ($_SESSION['usuario']) {
                         <div class="MostrarInicio">
 
                             <form accept-charset="utf-8" method="POST">
-                                <center><h1><i class="fa fa-search" aria-hidden="true"></i> Buscar <input type="text" name="busqueda" id="busqueda" value="" placeholder="" maxlength="30" autocomplete="off" onKeyUp="buscar();" style=" font-size: 1em;"></h1></center>
+                                <center><h1><i class="fa fa-search" aria-hidden="true"></i> <input type="text" name="busqueda" id="busqueda" maxlength="30" autocomplete="off" onKeyUp="buscar();" style=" font-size: 1em;"></h1></center>
                             </form>
                         
                         <div id="resultadoBusqueda"></div>
@@ -106,38 +111,160 @@ if ($_SESSION['usuario']) {
 
         <div class="container contenedor2">
             <center><h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Registro de usuario</h1><br></center>
-            <form action="registroindividual.php" method="post" class="form" role="form">
+            <form method="post" class="form" role="form" name="registroUsuario" autocomplete="off" id="registrarUsuarios">
+            <input type="hidden" name="registrador" value="<?php echo $_SESSION['usuario']; ?>">
             <div class="row">
-            <legend><h4> Información de identificación</h4></legend>
+            <legend></legend>
                 <div class="col-xs-4">
-                    <input type="text" class="form-control" placeholder="Cédula" required>
+                    <label for="sel1">Cédula</label>
+                    <input type="text" class="form-control centrarTexto" maxlength="8" onkeypress="return soloNumeros(event);" name="cedula"> 
                 </div>
                 <div class="col-xs-4">
-                    <input type="text" class="form-control" placeholder="Nombres" required>
+                    <label for="sel1">Nombres</label>
+                    <input type="text" class="form-control centrarTexto" maxlength="45" onkeypress="return soloLetras(event);" 
+                    style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" name="nombres" id="nombres">
                 </div>
                 <div class="col-xs-4">
-                    <input type="text" class="form-control" placeholder="Apellidos" required>
+                    <label for="sel1">Apellidos</label>
+                    <input type="text" class="form-control centrarTexto" maxlength="45" onkeypress="return soloLetras(event);"
+                    style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" name="apellidos" id="apellidos">
                 </div>
             </div>
            <br>
             <div class="row">
-                <h4> Información personal</h4>
+            <legend></legend>
                <div class="col-xs-4">
-                    <input type="text" class="form-control" placeholder=".col-xs-3">
+               <label for="sel1">Fecha de Nacimiento</label>
+                    <?php
+                    escribe_formulario_fecha_vacio("fecha1","registroUsuario");
+                    ?>
                 </div>
                 <div class="col-xs-4">
-                    <input type="text" class="form-control" placeholder=".col-xs-4">
+                    <div class="form-group">
+                        <label for="sel1">Género</label>
+                        <select class="form-control" name="genero">
+                            <option>MASCULINO</option>
+                            <option>FEMENINO</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="col-xs-4">
-                    <input type="text" class="form-control" placeholder=".col-xs-5">
+                <label for="sel1">Dirección</label>
+                    <input type="text" class="form-control centrarTexto" 
+                    style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" name="direccion">
                 </div>
              </div>
+             <div class="row">
+                 <legend></legend>
              <br>
-            <button class="btn btn-lg btn-danger btn-block" type="submit">
-                <i class="fa fa-plus-square" aria-hidden="true"></i> Registrar Tarjeta</button>
+            <button class="btn btn-lg btn-danger btn-block" id="registrarUsuario">Registrar Usuario</button>
+            </div>
             </form>
-        </div>                                    
+        </div>                 
+        <!--Validación de formulario-->
+
+        <script type="text/javascript">
+            function soloNumeros(e){
+
+            var keynum = window.event ? window.event.keyCode : e.which;
+            if ((keynum == 8) || (keynum == 46))
+            return true;
+         
+            return /\d/.test(String.fromCharCode(keynum));
+
+        }
+        </script>
+
+
+        <script>
+            function soloLetras(e){
+            key = e.keyCode || e.which;
+            tecla = String.fromCharCode(key).toLowerCase();
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+            especiales = "8-37-39-46";
+
+            tecla_especial = false
+            for(var i in especiales){
+                    if(key == especiales[i]){
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+
+                if(letras.indexOf(tecla)==-1 && !tecla_especial){
+                    return false;
+                }
+            }
+        </script>
+
+        <!--Envio de formulario en ajax-->
+
+
+
+        <script>   
+
+            $("#registrarUsuario").click(function() {  
+                if($("#nombres").val().length < 1) {  
+                    alert("El nombre es obligatorio");  
+                    return false;  
+                }else if($("#apellidos").val().length < 1){  
+                    alert("El apellido es obligatorio");  
+                    return false;  
+                }else if($("#fechaNacimiento").val().length < 1){  
+                    alert("La fecha es obligatoria");  
+                    return false;  
+                }else{
+                    var url = "registrarusuario.php"; // El script a dónde se realizará la petición.
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $("#registrarUsuarios").serialize(), // Adjuntar los campos del formulario enviado.
+                    success: function(data)
+                    {
+                        $("#respuesta").html(data); // Mostrar la respuestas del script PHP.
+                        $('.MostrarRegistro').hide();
+                    }
+                    });
+                }
+                return false;  
+            });  
+
+            
+        </script>
+
+        <!--
+
+        <script type="text/javascript">
+            $('document').ready(function(){
+                $('#registrarUsuario').click(function(){
+
+                    var cedula = $('#cedula').val();
+                    var nombres = $('#nombres').val();
+                    var apellidos = $('#apellidos').val();
+                    var fechaNacimiento = $('#fechaNacimiento').val();
+                    var genero = $('#genero').val();
+                    var direccion = $('#direccion').val();
+                    var registrador = $('#registrador').val();
+
+                    jQuery.post("registrarusuario.php", {
+                        cedula:cedula,
+                        nombres:nombres,
+                        apellidos:apellidos,
+                        fechaNacimiento:fechaNacimiento,
+                        genero:genero,
+                        direccion:direccion,
+                        registrador:registrador
+                    }, function(data, textStatus){
+                    });
+                });        
+            });
+        </script>
+
+        -->
+
                         </div>
+
+                            <div id="respuesta"></div>
                         <!--Seccion para el historial (formulario de historial)-->
                
                             <div class="MostrarHistorial">
@@ -189,13 +316,18 @@ if ($_SESSION['usuario']) {
 
 }else{
 	header("Status: 301 Moved Permanently", false, 301);
-	header("Location: index.php");
+	header("Location: /infocentro/");
 }
 
 if (isset($_POST['cerrar'])) {
 	session_destroy();
 	header("Status: 301 Moved Permanently", false, 301);
-	header("Location: index.php");
+	header("Location: /infocentro/");
+    ?>
+
+    <?php
 }
+
+ob_end_flush();
 
 ?>

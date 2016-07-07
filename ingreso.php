@@ -42,7 +42,7 @@ if (isset($_POST['enviar_ingreso'])) {
 
 		session_start();
 
-		$_SESSION['usuario'] = $usuario;
+		$_SESSION['usuario'] = $datos['id'];
 
 		echo '
 
