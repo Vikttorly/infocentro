@@ -1,7 +1,8 @@
 <?php
 
+error_reporting(0);
 session_start();
-require('conexion.php');
+include("conexion.php");
 
 ?>
 
@@ -65,17 +66,53 @@ if (isset($consultaBusqueda)) {
 			$fNacimiento = $resultados['fNacimiento'];
 			$edad = $resultados['edadActual'];
 
-			$consultaFecha = mysqli_fetch_assoc(mysqli_query($conexion,"SELECT DATE_FORMAT(fEntrada,'%d/%m/%Y') AS fecha_sola FROM visitas WHERE usuario=$id ORDER BY fEntrada ASC"));
+			$consultaFecha = mysqli_fetch_assoc(mysqli_query($conexion,"SELECT DATE_FORMAT(fEntrada,'%d/%m/%Y') AS fecha_sola FROM visitas WHERE usuario=$id ORDER BY fEntrada DESC"));
 			$ultimaVisita = $consultaFecha['fecha_sola'];
 			$nVisitas = mysqli_fetch_assoc(mysqli_query($conexion,"SELECT count(*) AS nVisitas FROM visitas WHERE usuario=$id"));
-			
+
 			if ($hoy == $ultimaVisita) {
 				$ultimaVisita = 'Hoy';
 			}
 
+$añoActual = date("Y");
+$mesActual = date("m");
+$diaActual = date("d");
+$horaActual = date("G");
+$minutoActual = date("i");
+$segundoActual = date("s");
+
+$consulta2 = mysqli_fetch_assoc(mysqli_query($conexion,"SELECT fEntrada FROM visitas WHERE usuario=$id ORDER BY fEntrada DESC"));
+$visita = $consulta2['fEntrada'];
+
+$fechaIni = $visita;
+$fechaFin = $añoActual.'-'.$mesActual.'-'.$diaActual.' '.$horaActual.':'.$minutoActual.':'.$segundoActual;
+
+//e.e las partes de cada fecha
+list($iniDia, $iniHora) = split(" ", $fechaIni);
+list($anyo, $mes, $dia) = split("-", $iniDia);
+list($hora, $min, $seg) = split(":", $iniHora);
+$tiempoIni = mktime($hora + 0, $min + 0, $seg + 0, $mes + 0, $dia + 0, $anyo);
+
+//el $tiempoFin
+list($finDia, $finHora) = split(" ", $fechaFin);
+list($anyo, $mes, $dia) = split("-", $finDia);
+list($hora, $min, $seg) = split(":", $finHora);
+$tiempoFin = mktime($hora + 0, $min + 0, $seg + 0, $mes + 0, $dia + 0, $anyo);
+
+//resto los valores y tengo segundos
+$difSegundos = $tiempoFin - $tiempoIni;
+//transformo a horas los segundos
+
+if ($difSegundos < 600) {
+	$addVisita = '';
+}else{
+
+	$addVisita = '<i class="fa fa-plus-square" aria-hidden="true" id="visitado"></i>';
+}
+
 			//Output
 			$mensaje .= '  
-			<tr><td><div><input type="hidden" id="idUsuario" value="'.$id.'">'.$ci.'</div></td><td>'.$nombre.'</td><td>'.$edad.'</td><td>'.$nVisitas['nVisitas'].'</td><td>'.$ultimaVisita.'</td><td><i class="fa fa-plus-square" aria-hidden="true" id="visitado"></i></td>
+			<tr><td><div><input type="hidden" id="idUsuario" value="'.$id.'">'.$ci.'</div></td><td>'.$nombre.'</td><td>'.$edad.'</td><td>'.$nVisitas['nVisitas'].'</td><td>'.$ultimaVisita.'</td><td>'.$addVisita.'</td>
 			</tr>
 			';
 }
