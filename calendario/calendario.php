@@ -231,7 +231,7 @@ echo '
 		A&ntilde;o: <br>
 		<select name=nuevo_ano>';
 
-for ($cont=1900;$cont<$ano+3;$cont++){
+for ($cont=1950;$cont<$ano-2;$cont++){
 	echo "<option value='$cont'";
 	if ($ano==$cont) 
    		echo " selected";
@@ -243,7 +243,7 @@ echo '
 echo '
 	</tr>
 	<tr>
-	    <td colspan="2" align="center"><input type="Submit" value="[ IR A ESE MES ]"></td>
+	    <td colspan="2" align="center"><input type="Submit" value="[ IR A ESTE MES ]"></td>
 	</tr>
 	</table><br>
 	

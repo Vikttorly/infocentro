@@ -37,7 +37,7 @@
 		<div class="col-md-8 col-md-offset-2">
 			<form method="post" action="ingreso.php" autocomplete="off">
 				<div class="form-group">
-					<label for="usuario">Correo Electrónico: </label>
+					<label for="usuario">Usuario </label>
 					<input type="usuario" class="form-control" id="usuario_ingreso" placeholder="Correo Electrónico" name="usuario_ingreso" required>
 				</div>
 				<div class="form-group">

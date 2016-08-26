@@ -1,15 +1,24 @@
 <?php
 
+error_reporting(0);
+
 include("conexion.php");
 
 $cedula = $_POST['cedula'];
 $nombres = $_POST['nombres'];
 $apellidos = $_POST['apellidos'];
 $nombre = $nombres.' '.$apellidos;
-$fechaNacimiento = $_POST['fecha1'];
 $genero = $_POST['genero'];
 $direccion = $_POST['direccion'];
 $registrador = $_POST['registrador'];
+
+//Haciendo string de fecha de nacimiento
+
+$dia = $_POST['dia'];
+$mes = $_POST['mes'];
+$anio = $_POST['anio'];
+
+$fechaNacimiento = $anio.'-'.$mes.'-'.$dia;
 
 if ($_POST['nombres']) {
 

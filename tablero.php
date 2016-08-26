@@ -27,10 +27,11 @@ ob_start();
 
 <?php
 
-include ("calendario/calendario.php");
 session_start();
 
 if ($_SESSION['usuario']) {
+
+$anioActual = date("Y");
 	
 ?>
 
@@ -110,14 +111,15 @@ if ($_SESSION['usuario']) {
                         <div class="MostrarRegistro">
 
         <div class="container contenedor2">
-            <center><h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Registro de usuario</h1><br></center>
+            <center><h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i> REGISTRO DE USUARIO</h1><br></center>
             <form method="post" class="form" role="form" name="registroUsuario" autocomplete="off" id="registrarUsuarios">
             <input type="hidden" name="registrador" value="<?php echo $_SESSION['usuario']; ?>">
+            <input type="hidden" name="anioActual" value="<?php echo $anioActual; ?>" id="anioActual">
             <div class="row">
             <legend></legend>
                 <div class="col-xs-4">
                     <label for="sel1">Cédula</label>
-                    <input type="text" class="form-control centrarTexto" maxlength="8" onkeypress="return soloNumeros(event);" name="cedula"> 
+                    <input type="text" class="form-control centrarTexto" maxlength="8" onkeypress="return soloNumeros(event);" name="cedula" id="cedula"> 
                 </div>
                 <div class="col-xs-4">
                     <label for="sel1">Nombres</label>
@@ -134,10 +136,33 @@ if ($_SESSION['usuario']) {
             <div class="row">
             <legend></legend>
                <div class="col-xs-4">
-               <label for="sel1">Fecha de Nacimiento</label>
-                    <?php
-                    escribe_formulario_fecha_vacio("fecha1","registroUsuario");
-                    ?>
+               <label for="sel1">Fecha de Nacimiento</label><br>
+                    <table>
+                        <tr>
+                            <td>
+                            <input type="text" class="form-control centrarTexto" maxlength="2" onkeypress="return soloNumeros(event);" name="dia" size="1" id="calendarioDia" placeholder="Dia"> 
+                            </td>
+                            <td>
+                                <select class="form-control" name="mes">
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select> 
+                            </td>
+                            <td>
+                                <input type="text" class="form-control centrarTexto" maxlength="4" onkeypress="return soloNumeros(event);" name="anio" size="2" id="calendarioAnio" placeholder="Año"> 
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-xs-4">
                     <div class="form-group">
@@ -151,7 +176,7 @@ if ($_SESSION['usuario']) {
                 <div class="col-xs-4">
                 <label for="sel1">Dirección</label>
                     <input type="text" class="form-control centrarTexto" 
-                    style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" name="direccion">
+                    style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" name="direccion" id="direccion">
                 </div>
              </div>
              <div class="row">
@@ -203,33 +228,81 @@ if ($_SESSION['usuario']) {
 
         <script>   
 
-            $("#registrarUsuario").click(function() {  
-                if($("#nombres").val().length < 1) {  
-                    alert("El nombre es obligatorio");  
-                    return false;  
-                }else if($("#apellidos").val().length < 1){  
-                    alert("El apellido es obligatorio");  
-                    return false;  
-                }else if($("#fechaNacimiento").val().length < 1){  
-                    alert("La fecha es obligatoria");  
-                    return false;  
-                }else{
-                    var url = "registrarusuario.php"; // El script a dónde se realizará la petición.
+            $("#registrarUsuario").click(function() {
+                var c1 = false;
+                var c2 = false;
+                var c3 = false;
+                var c4 = false;
+                var c5 = false;
+                var anioActual = $("#anioActual").val();
+                var anioMaximo = anioActual - 2;
+                var anioMinimo = anioActual - 100;
+
+            if ($("#cedula").val().length > 0) { //Validando campo de cedula
+                if ($("#cedula").val().length < 7) {
+                    $("#cedula").css("border-color", "#d23737"); 
+                    c1 = false;
+                }else if ($("#cedula").val().length > 7) {
+                    $("#cedula").css("border-color", "#92c54f");
+                    c1 = true;
+                }
+            }else{
+                $("#cedula").css("border-color", "#ccc");
+                    c1 = true;
+            }
+            
+            if($("#nombres").val().length < 1) {  //Validando campo de nombre
+                    $("#nombres").css("border-color", "#d23737"); 
+                    c2 = false; 
+                }else{  
+                    $("#nombres").css("border-color", "#92c54f");   
+                    c2 = true;
+                }     
+
+            if($("#apellidos").val().length < 1) {  //Validando campo de apellido
+                    $("#apellidos").css("border-color", "#d23737"); 
+                    c3 = false; 
+                }else{  
+                    $("#apellidos").css("border-color", "#92c54f");   
+                    c3 = true;
+                }
+
+            if (($("#calendarioDia").val() < 1) || ($("#calendarioDia").val() > 31)) { //Validando campo de dia
+                    $("#calendarioDia").css("border-color", "#d23737");
+                    c4 = false;
+
+            }else{
+                    $("#calendarioDia").css("border-color", "#92c54f");
+                    c4 = true;
+            }
+
+            if (($("#calendarioAnio").val() > anioMaximo) || ($("#calendarioAnio").val() < anioMinimo)) { //Validando campo de año
+                    $("#calendarioAnio").css("border-color", "#d23737");
+                    c5 = false;
+            }else{
+                    $("#calendarioAnio").css("border-color", "#92c54f");
+                    c5 = true;
+            }
+
+
+
+
+            if ((c1 == true) && (c2 == true) && (c3 == true) && (c4 == true) && (c5 == true)) {
+                var url = "registrarusuario.php"; 
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: $("#registrarUsuarios").serialize(), // Adjuntar los campos del formulario enviado.
+                    data: $("#registrarUsuarios").serialize(), 
                     success: function(data)
                     {
-                        $("#respuesta").html(data); // Mostrar la respuestas del script PHP.
+                        $("#respuesta").html(data); 
                         $('.MostrarRegistro').hide();
                     }
                     });
                 }
-                return false;  
+                return false;
             });  
 
-            
         </script>
 
         <!--
